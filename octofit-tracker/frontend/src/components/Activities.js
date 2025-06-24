@@ -1,3 +1,5 @@
+// Copilot agent mode
+// API endpoint: /api/activity/
 import React, { useEffect, useState } from 'react';
 
 const ACTIVITIES_API = 'https://[REPLACE-THIS-WITH-YOUR-CODESPACE-NAME]-8000.app.github.dev/api/activity/';
