@@ -1,9 +1,13 @@
+
+import os
+import django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'octofit_tracker.settings')
+django.setup()
 from octofit_tracker.models import Team, Activity, Leaderboard, Workout
 from django.contrib.auth.models import User
 from django.utils import timezone
 
 # This script is for quick test data population outside Django management commands
-
 def run():
     # Users
     user1 = User.objects.create_user(username='alice', email='alice@example.com', password='alicepass')
@@ -31,8 +35,4 @@ def run():
     print("Test data added.")
 
 if __name__ == "__main__":
-    import django
-    import os
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'octofit_tracker.settings')
-    django.setup()
     run()
