@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
-from octofit_tracker.models import User, Team, Activity, Leaderboard, Workout
+from octofit_tracker.models import Team, Activity, Leaderboard, Workout
+from django.contrib.auth.models import User
 from django.utils import timezone
 
 class Command(BaseCommand):
@@ -14,28 +15,26 @@ class Command(BaseCommand):
         Workout.objects.all().delete()
 
         # Users
-        user1 = User.objects.create(email='alice@example.com', name='Alice', password='alicepass')
-        user2 = User.objects.create(email='bob@example.com', name='Bob', password='bobpass')
-        user3 = User.objects.create(email='carol@example.com', name='Carol', password='carolpass')
+        user1 = User.objects.create_user(username='alice', email='alice@example.com', password='alicepass')
+        user2 = User.objects.create_user(username='bob', email='bob@example.com', password='bobpass')
+        user3 = User.objects.create_user(username='carol', email='carol@example.com', password='carolpass')
 
-        # Teams
-        team1 = Team.objects.create(name='Team Alpha')
-        team1.members.set([user1, user2])
-        team2 = Team.objects.create(name='Team Beta')
-        team2.members.set([user3])
+        # Teams (store user IDs as strings)
+        team1 = Team.objects.create(name='Team Alpha', members=[str(user1.id), str(user2.id)])
+        team2 = Team.objects.create(name='Team Beta', members=[str(user3.id)])
 
         # Activities
-        Activity.objects.create(user=user1, activity_type='run', duration=30, date=timezone.now())
-        Activity.objects.create(user=user2, activity_type='walk', duration=45, date=timezone.now())
-        Activity.objects.create(user=user3, activity_type='cycle', duration=60, date=timezone.now())
+        Activity.objects.create(user_id=str(user1.id), activity_type='run', duration=30, date=timezone.now())
+        Activity.objects.create(user_id=str(user2.id), activity_type='walk', duration=45, date=timezone.now())
+        Activity.objects.create(user_id=str(user3.id), activity_type='cycle', duration=60, date=timezone.now())
 
         # Leaderboard
-        Leaderboard.objects.create(team=team1, points=150)
-        Leaderboard.objects.create(team=team2, points=100)
+        Leaderboard.objects.create(team_id=str(team1.id), points=150)
+        Leaderboard.objects.create(team_id=str(team2.id), points=100)
 
         # Workouts
-        Workout.objects.create(user=user1, workout_type='cardio', details={'distance': 5}, date=timezone.now())
-        Workout.objects.create(user=user2, workout_type='strength', details={'reps': 20}, date=timezone.now())
-        Workout.objects.create(user=user3, workout_type='yoga', details={'duration': 40}, date=timezone.now())
+        Workout.objects.create(user_id=str(user1.id), workout_type='cardio', details={'distance': 5}, date=timezone.now())
+        Workout.objects.create(user_id=str(user2.id), workout_type='strength', details={'reps': 20}, date=timezone.now())
+        Workout.objects.create(user_id=str(user3.id), workout_type='yoga', details={'duration': 40}, date=timezone.now())
 
         self.stdout.write(self.style.SUCCESS('Test data populated successfully.'))

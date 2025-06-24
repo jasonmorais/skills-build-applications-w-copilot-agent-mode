@@ -1,32 +1,31 @@
+from django.contrib.auth.models import User
+
 from djongo import models
 
-class User(models.Model):
-    _id = models.ObjectIdField()
-    email = models.EmailField(unique=True)
-    name = models.CharField(max_length=100)
-    password = models.CharField(max_length=128)
-    # Add other fields as needed
-
 class Team(models.Model):
-    _id = models.ObjectIdField()
     name = models.CharField(max_length=100)
-    members = models.ManyToManyField('User', related_name='teams')
+    members = models.JSONField()  # store user IDs as a list of strings
+    class Meta:
+        db_table = 'teams'
 
 class Activity(models.Model):
-    _id = models.ObjectIdField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.CharField(max_length=100)  # store user ID as string
     activity_type = models.CharField(max_length=50)
     duration = models.IntegerField()
     date = models.DateTimeField()
+    class Meta:
+        db_table = 'activity'
 
 class Leaderboard(models.Model):
-    _id = models.ObjectIdField()
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    team_id = models.CharField(max_length=100)  # store team ID as string
     points = models.IntegerField()
+    class Meta:
+        db_table = 'leaderboard'
 
 class Workout(models.Model):
-    _id = models.ObjectIdField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.CharField(max_length=100)  # store user ID as string
     workout_type = models.CharField(max_length=50)
     details = models.JSONField()
     date = models.DateTimeField()
+    class Meta:
+        db_table = 'workouts'
