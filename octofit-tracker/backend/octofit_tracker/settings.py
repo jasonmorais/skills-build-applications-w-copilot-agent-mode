@@ -1,3 +1,4 @@
+# Note: djongo is used as the database engine for MongoDB integration (djongo)
 # Copilot agent mode
 """
 Django settings for octofit_tracker project.
