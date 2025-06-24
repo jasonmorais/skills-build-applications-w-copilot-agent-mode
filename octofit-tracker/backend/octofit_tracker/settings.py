@@ -27,7 +27,11 @@ SECRET_KEY = "django-insecure-g)5pq#wnb2%rnmln8rsbys+$6v4t$fide#4@1q05(2d9v(h46v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+import os
+# Allow localhost and codespace URL for Django backend
+codespace = os.environ.get('CODESPACE_NAME', '[REPLACE-THIS-WITH-YOUR-CODESPACE-NAME]')
+codespace_host = f"{codespace}-8000.app.github.dev"
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", codespace_host, "*"]
 
 
 # Application definition
